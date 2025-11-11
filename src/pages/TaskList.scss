@@ -1,0 +1,113 @@
+.task-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+
+  button {
+    padding: 10px;
+    width: 50%;
+    border-radius: 5px;
+    border: none;
+    background-color: rgb(144, 162, 210);
+    color: rgb(0, 0, 0);
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: rgb(17, 39, 119);
+      color: white;
+      cursor: pointer;
+    }
+  }
+
+  #allCompleteBtn {
+    width: fit-content;
+    background-color: rgba(80, 204, 80, 0.736);
+    color: rgb(0, 0, 0);
+
+    &:hover {
+      background-color: rgb(1, 178, 7);
+      color: white;
+    }
+  }
+  .search-bar {
+    position: relative;
+    display: inline-block;
+
+    .search-icon {
+      position: absolute;
+      left: 10px;
+      top: 22px;
+      transform: translateY(-50%);
+      color: #8c8b8b;
+      font-size: 16px;
+    }
+    .search-input {
+      width: 100%;
+      padding: 10px 10px 10px 35px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1.1em;
+      transition: border 0.3s ease;
+      background-color: white;
+
+      &:focus {
+        outline: none;
+        border: 2px solid rgb(29, 84, 108);
+      }
+    }
+  }
+
+  .task-group {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    gap: 5px;
+    background-color: rgba(214, 224, 233, 0.748);
+    border-radius: 8px;
+    padding: 15px;
+
+    .detailDisplay {
+      font-size: 1.3em;
+
+      span {
+        font-weight: bolder;
+      }
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 5px;
+
+      #editBtn {
+        background-color: rgb(155, 188, 228);
+        color: rgb(0, 0, 0);
+
+        &:hover {
+          background-color: rgb(56, 81, 142);
+          color: white;
+        }
+      }
+
+      #deleteBtn {
+        background-color: rgb(139, 155, 175);
+        color: rgb(0, 0, 0);
+
+        &:hover {
+          background-color: rgb(72, 78, 96);
+          color: white;
+        }
+      }
+
+      #completeBtn {
+        background-color: rgba(80, 204, 80, 0.736);
+        color: rgb(0, 0, 0);
+
+        &:hover {
+          background-color: rgb(1, 178, 7);
+          color: white;
+        }
+      }
+    }
+  }
+}
