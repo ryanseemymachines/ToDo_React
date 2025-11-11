@@ -1,20 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "./AddTask.scss";
 
-function AddTask({
-  addTask,
-  editingIndex,
-  currentTask,
-  updateTask,
-  cancelEdit,
-}) {
+function AddTask({ addTask, editingId, currentTask, updateTask, cancelEdit }) {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [date, setDate] = useState("");
   const [errors, setError] = useState("");
 
   useEffect(() => {
-    if (editingIndex !== null) {
+    if (editingId !== null) {
       setTitle(currentTask.title);
       setDesc(currentTask.desc);
       setDate(currentTask.date);
@@ -23,14 +17,14 @@ function AddTask({
       setDate("");
       setDesc("");
     }
-  }, [editingIndex, currentTask]);
+  }, [editingId, currentTask]);
 
   const today = new Date().toISOString().split("T")[0];
 
   const validate = () => {
     let isValid = true;
     const newError = {};
-    const nameRegex = /^[A-Za-z][A-Za-z0-9 _-]*[A-Za-z0-9]$/
+    const nameRegex = /^[A-Za-z][A-Za-z0-9 _-]*[A-Za-z0-9]$/;
 
     if (!title.trim()) {
       newError.title = "Title is required";
@@ -61,8 +55,14 @@ function AddTask({
 
   const handleAddTask = () => {
     if (validate()) {
-      const taskData = { title, desc, date };
-      if (editingIndex !== null) {
+      const taskData = {
+        id: editingId !== null ? currentTask.id : Date.now(),
+        title,
+        desc,
+        date,
+      };
+
+      if (editingId !== null) {
         updateTask(taskData);
       } else {
         addTask(taskData);
@@ -106,17 +106,16 @@ function AddTask({
         {errors.date ? (
           <div className="error-message">{errors.date}</div>
         ) : null}
-        {editingIndex !== null ? (
+        {editingId !== null ? (
           <>
-          <div className="formBtnGroup">
-            <button type="button" onClick={cancelEdit}>
-              Cancel
-            </button>
-            <button type="button" onClick={handleAddTask}>
-              Save
-            </button>
-          </div>
-            
+            <div className="formBtnGroup">
+              <button type="button" onClick={cancelEdit}>
+                Cancel
+              </button>
+              <button type="button" onClick={handleAddTask}>
+                Save
+              </button>
+            </div>
           </>
         ) : (
           <button type="button" onClick={handleAddTask}>

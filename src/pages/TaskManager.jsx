@@ -4,8 +4,9 @@ import TaskList from "./TaskList";
 
 function TaskManager() {
   const [todoList, setTodoList] = useState([]);
-  const [editIndex, setEditIndex] = useState(null);
+  const [editId, setEditId] = useState(null);
   const [currentTask, setCurrentTask] = useState({
+    id: "",
     title: "",
     desc: "",
     date: "",
@@ -19,41 +20,41 @@ function TaskManager() {
 
   const updateTask = (task) => {
     const updatedList = [...todoList];
-    updatedList[editIndex] = { ...task, status: "pending" };
+    updatedList[editId] = { ...task, status: "pending" };
     setTodoList(updatedList);
-    setEditIndex(null);
-    setCurrentTask({ title: "", desc: "", date: "" });
+    setEditId(null);
+    setCurrentTask({ id: "", title: "", desc: "", date: "" });
   };
 
-  const deleteTask = (index) => {
+  const deleteTask = (id) => {
     const updatedList = [...todoList];
-    updatedList.splice(index, 1);
+    updatedList.splice(id, 1);
     setTodoList(updatedList);
   };
 
-  const startEdit = (task, index) => {
-    setEditIndex(index);
+  const startEdit = (task, id) => {
+    setEditId(id);
     setCurrentTask(task);
   };
 
   const cancelEdit = () => {
-    setEditIndex(null);
-    setCurrentTask({ title: "", desc: "", date: "" });
+    setEditId(null);
+    setCurrentTask({ id: "", title: "", desc: "", date: "" });
   };
 
-  const markCompleted = (task, index) => {
+  const markCompleted = (task, id) => {
     const updatedList = [...todoList];
-    updatedList[index] = { ...task, status: "completed" };
+    updatedList[id] = { ...task, status: "completed" };
     setTodoList(updatedList);
   };
 
-  const markAllCompleted = () =>{
+  const markAllCompleted = () => {
     const updatedList = [...todoList];
     updatedList.forEach((task) => {
       task.status = "Completed";
-    })
+    });
     setTodoList(updatedList);
-  }
+  };
 
   const filteredTasks =
     searchTerm.trim() === ""
@@ -68,11 +69,12 @@ function TaskManager() {
 
   return (
     <div className="todo-content">
+      {console.log(todoList)}
       <AddTask
         addTask={addTask}
         updateTask={updateTask}
         cancelEdit={cancelEdit}
-        editingIndex={editIndex}
+        editingId={editId}
         currentTask={currentTask}
       />
       <TaskList

@@ -26,7 +26,6 @@ function TaskList({
         <div>No tasks yet</div>
       ) : (
         <>
-
           {todoList.some((task) => task.status === "pending") ? (
             <button
               id="allCompleteBtn"
@@ -38,8 +37,8 @@ function TaskList({
           ) : (
             <p>All tasks completed</p>
           )}
-          {todoList.map((task, index) => (
-            <section className="task-group" key={index}>
+          {todoList.map((task, id) => (
+            <section className="task-group" key={task.id}>
               <div className="detailDisplay">
                 <span>Title : </span>
                 {task.title}
@@ -69,21 +68,21 @@ function TaskList({
                   <button
                     id="editBtn"
                     type="button"
-                    onClick={() => startEdit(task, index)}
+                    onClick={() => startEdit(task, id)}
                   >
                     Edit
                   </button>
                   <button
                     id="deleteBtn"
                     type="button"
-                    onClick={() => deleteTask(index)}
+                    onClick={() => deleteTask(id)}
                   >
                     Delete
                   </button>
                   <button
                     id="completeBtn"
                     type="button"
-                    onClick={() => markCompleted(task, index)}
+                    onClick={() => markCompleted(task, id)}
                   >
                     Mark as completed
                   </button>
@@ -93,7 +92,7 @@ function TaskList({
                   <button
                     id="deleteBtn"
                     type="button"
-                    onClick={() => deleteTask(index)}
+                    onClick={() => deleteTask(id)}
                   >
                     Delete
                   </button>
