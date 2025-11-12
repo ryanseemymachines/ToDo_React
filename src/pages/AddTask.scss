@@ -3,7 +3,7 @@
   flex-direction: column;
   gap: 20px;
   
-  input {
+  input,textarea {
     width: 80%;
     padding: 12px;
     font-size: 1.3em;
@@ -16,6 +16,9 @@
       border: 2px solid rgb(95, 95, 95);
     }
   }
+  textarea{
+      resize: vertical;
+    }
   .error-message {
     color: red;
     font-size: 1.1em;

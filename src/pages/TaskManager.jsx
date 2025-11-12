@@ -4,56 +4,62 @@ import TaskList from "./TaskList";
 
 function TaskManager() {
   const [todoList, setTodoList] = useState([]);
-  const [editId, setEditId] = useState(null);
   const [currentTask, setCurrentTask] = useState({
     id: "",
     title: "",
     desc: "",
     date: "",
   });
-
+  const [editId, setEditId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const addTask = (task) => {
-    setTodoList([...todoList, { ...task, status: "pending" }]);
+  const addTask = () => {
+    setTodoList((prev) => [
+      ...prev,
+      { ...currentTask, id: Date.now(), status: "pending" },
+    ]);
+    resetTask();
   };
 
-  const updateTask = (task) => {
-    const updatedList = [...todoList];
-    updatedList[editId] = { ...task, status: "pending" };
-    setTodoList(updatedList);
-    setEditId(null);
-    setCurrentTask({ id: "", title: "", desc: "", date: "" });
-  };
+  const updateTask = () => {
+  setTodoList((prev) => {
+    const updatedList = prev.map((task) =>
+      task.id === currentTask.id
+        ? { ...currentTask, status: "pending" }
+        : task
+    );
+    return updatedList;
+  });
+  setEditId(null);
+  resetTask();
+};
 
   const deleteTask = (id) => {
-    const updatedList = [...todoList];
-    updatedList.splice(id, 1);
-    setTodoList(updatedList);
+    setTodoList((prev) => prev.filter((task) => task.id !== id));
   };
 
-  const startEdit = (task, id) => {
-    setEditId(id);
+  const startEdit = (task) => {
+    setEditId(task.id);
     setCurrentTask(task);
   };
 
   const cancelEdit = () => {
     setEditId(null);
-    setCurrentTask({ id: "", title: "", desc: "", date: "" });
+    resetTask();
   };
 
-  const markCompleted = (task, id) => {
-    const updatedList = [...todoList];
-    updatedList[id] = { ...task, status: "completed" };
-    setTodoList(updatedList);
+  const markCompleted = (id) => {
+    setTodoList((prev) =>
+      prev.map((task) =>
+        task.id === id ? { ...task, status: "completed" } : task
+      )
+    );
   };
 
   const markAllCompleted = () => {
-    const updatedList = [...todoList];
-    updatedList.forEach((task) => {
-      task.status = "Completed";
-    });
-    setTodoList(updatedList);
+    setTodoList((prev) =>
+      prev.map((task) => ({ ...task, status: "completed" }))
+    );
   };
 
   const filteredTasks =
@@ -67,16 +73,25 @@ function TaskManager() {
           );
         });
 
+  const resetTask = () =>
+    setCurrentTask({
+      id: "",
+      title: "",
+      desc: "",
+      date: ""
+    });
+
   return (
     <div className="todo-content">
-      {console.log(todoList)}
       <AddTask
+        currentTask={currentTask}
+        setCurrentTask={setCurrentTask}
         addTask={addTask}
         updateTask={updateTask}
-        cancelEdit={cancelEdit}
         editingId={editId}
-        currentTask={currentTask}
+        cancelEdit={cancelEdit}
       />
+
       <TaskList
         todoList={filteredTasks}
         deleteTask={deleteTask}

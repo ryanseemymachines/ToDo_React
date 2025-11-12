@@ -1,78 +1,56 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./AddTask.scss";
 
-function AddTask({ addTask, editingId, currentTask, updateTask, cancelEdit }) {
-  const [title, setTitle] = useState("");
-  const [desc, setDesc] = useState("");
-  const [date, setDate] = useState("");
-  const [errors, setError] = useState("");
-
-  useEffect(() => {
-    if (editingId !== null) {
-      setTitle(currentTask.title);
-      setDesc(currentTask.desc);
-      setDate(currentTask.date);
-    } else {
-      setTitle("");
-      setDate("");
-      setDesc("");
-    }
-  }, [editingId, currentTask]);
-
+function AddTask({
+  currentTask,
+  setCurrentTask,
+  addTask,
+  updateTask,
+  editingId,
+  cancelEdit,
+}) {
+  const [errors, setErrors] = useState({});
   const today = new Date().toISOString().split("T")[0];
 
-  const validate = () => {
-    let isValid = true;
-    const newError = {};
-    const nameRegex = /^[A-Za-z][A-Za-z0-9 _-]*[A-Za-z0-9]$/;
-
-    if (!title.trim()) {
-      newError.title = "Title is required";
-      isValid = false;
-    } else if (!nameRegex.test(title)) {
-      newError.title =
-        "Title can only contain letters, numbers, spaces, _ or -";
-      isValid = false;
-    }
-
-    if (desc && !nameRegex.test(desc)) {
-      newError.desc =
-        "Description can only contain letters, numbers, spaces, _ or -";
-      isValid = false;
-    }
-
-    if (!date) {
-      newError.date = "Date is required";
-      isValid = false;
-    } else if (date < today) {
-      newError.date = "Date cannot be in the past";
-      isValid = false;
-    }
-
-    setError(newError);
-    return isValid;
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setCurrentTask((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleAddTask = () => {
-    if (validate()) {
-      const taskData = {
-        id: editingId !== null ? currentTask.id : Date.now(),
-        title,
-        desc,
-        date,
-      };
+  const validate = () => {
+    const newErrors = {};
+    const nameRegex = /^[A-Za-z0-9][A-Za-z0-9 _-]*$/;
+    let valid = true;
 
-      if (editingId !== null) {
-        updateTask(taskData);
-      } else {
-        addTask(taskData);
-      }
-
-      setTitle("");
-      setDate("");
-      setDesc("");
-      setError({});
+    if (!currentTask.title.trim()) {
+      newErrors.title = "Title is required";
+      valid = false;
+    } else if (!nameRegex.test(currentTask.title)) {
+      newErrors.title = "Title can only contain letters, numbers, spaces, _ or -";
+      valid = false;
     }
+
+    if (currentTask.desc && !nameRegex.test(currentTask.desc)) {
+      newErrors.desc = "Description can only contain letters, numbers, spaces, _ or -";
+      valid = false;
+    }
+
+    if (!currentTask.date) {
+      newErrors.date = "Date is required";
+      valid = false;
+    } else if (currentTask.date < today) {
+      newErrors.date = "Date cannot be in the past";
+      valid = false;
+    }
+
+    setErrors(newErrors);
+    return valid;
+  };
+
+  const handleSubmit = () => {
+    if (!validate()) return;
+    editingId !== null ? updateTask() : addTask();
+    setErrors({});
   };
 
   return (
@@ -80,45 +58,41 @@ function AddTask({ addTask, editingId, currentTask, updateTask, cancelEdit }) {
       <div className="form-container">
         <input
           type="text"
+          name="title"
           placeholder="Enter a task title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          value={currentTask.title}
+          onChange={handleChange}
         />
-        {errors.title ? (
-          <div className="error-message">{errors.title}</div>
-        ) : null}
+        {errors.title && <div className="error-message">{errors.title}</div>}
+
+        <textarea
+          name="desc"
+          placeholder="Enter the description"
+          value={currentTask.desc}
+          onChange={handleChange}
+        />
+        {errors.desc && <div className="error-message">{errors.desc}</div>}
 
         <input
-          type="text"
-          placeholder="Enter the description"
-          value={desc}
-          onChange={(e) => setDesc(e.target.value)}
-        />
-        {errors.desc ? (
-          <div className="error-message">{errors.desc}</div>
-        ) : null}
-        <input
           type="date"
-          value={date}
+          name="date"
+          value={currentTask.date}
           min={today}
-          onChange={(e) => setDate(e.target.value)}
+          onChange={handleChange}
         />
-        {errors.date ? (
-          <div className="error-message">{errors.date}</div>
-        ) : null}
+        {errors.date && <div className="error-message">{errors.date}</div>}
+
         {editingId !== null ? (
-          <>
-            <div className="formBtnGroup">
-              <button type="button" onClick={cancelEdit}>
-                Cancel
-              </button>
-              <button type="button" onClick={handleAddTask}>
-                Save
-              </button>
-            </div>
-          </>
+          <div className="formBtnGroup">
+            <button type="button" onClick={cancelEdit}>
+              Cancel
+            </button>
+            <button type="button" onClick={handleSubmit}>
+              Save
+            </button>
+          </div>
         ) : (
-          <button type="button" onClick={handleAddTask}>
+          <button type="button" onClick={handleSubmit}>
             Add
           </button>
         )}

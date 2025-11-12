@@ -1,4 +1,3 @@
-import React from "react";
 import "./TaskList.scss";
 
 function TaskList({
@@ -22,22 +21,20 @@ function TaskList({
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
+
       {todoList.length === 0 ? (
         <div>No tasks yet</div>
       ) : (
         <>
           {todoList.some((task) => task.status === "pending") ? (
-            <button
-              id="allCompleteBtn"
-              type="button"
-              onClick={markAllCompleted}
-            >
+            <button id="allCompleteBtn" type="button" onClick={markAllCompleted}>
               Mark all as completed
             </button>
           ) : (
             <p>All tasks completed</p>
           )}
-          {todoList.map((task, id) => (
+
+          {todoList.map((task) => (
             <section className="task-group" key={task.id}>
               <div className="detailDisplay">
                 <span>Title : </span>
@@ -63,41 +60,41 @@ function TaskList({
                 {task.status}
               </div>
 
-              {task.status === "pending" ? (
-                <div className="btn-group">
-                  <button
-                    id="editBtn"
-                    type="button"
-                    onClick={() => startEdit(task, id)}
-                  >
-                    Edit
-                  </button>
+              <div className="btn-group">
+                {task.status === "pending" ? (
+                  <>
+                    <button
+                      id="editBtn"
+                      type="button"
+                      onClick={() => startEdit(task)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      id="deleteBtn"
+                      type="button"
+                      onClick={() => deleteTask(task.id)}
+                    >
+                      Delete
+                    </button>
+                    <button
+                      id="completeBtn"
+                      type="button"
+                      onClick={() => markCompleted(task.id)}
+                    >
+                      Mark as completed
+                    </button>
+                  </>
+                ) : (
                   <button
                     id="deleteBtn"
                     type="button"
-                    onClick={() => deleteTask(id)}
+                    onClick={() => deleteTask(task.id)}
                   >
                     Delete
                   </button>
-                  <button
-                    id="completeBtn"
-                    type="button"
-                    onClick={() => markCompleted(task, id)}
-                  >
-                    Mark as completed
-                  </button>
-                </div>
-              ) : (
-                <div className="btn-group">
-                  <button
-                    id="deleteBtn"
-                    type="button"
-                    onClick={() => deleteTask(id)}
-                  >
-                    Delete
-                  </button>
-                </div>
-              )}
+                )}
+              </div>
             </section>
           ))}
         </>
