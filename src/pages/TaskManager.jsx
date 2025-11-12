@@ -9,6 +9,7 @@ function TaskManager() {
     title: "",
     desc: "",
     date: "",
+    status:"pending",
   });
   const [editId, setEditId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
