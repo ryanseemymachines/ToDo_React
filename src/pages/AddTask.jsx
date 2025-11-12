@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import "./AddTask.scss";
+import FormButton from "../components/FormButtons";
+import Input from "../components/Input";
+import TextArea from "../components/TextArea";
 
 function AddTask({
   currentTask,
@@ -56,7 +59,7 @@ function AddTask({
   return (
     <form>
       <div className="form-container">
-        <input
+        <Input
           type="text"
           name="title"
           placeholder="Enter a task title"
@@ -65,7 +68,7 @@ function AddTask({
         />
         {errors.title && <div className="error-message">{errors.title}</div>}
 
-        <textarea
+        <TextArea
           name="desc"
           placeholder="Enter the description"
           value={currentTask.desc}
@@ -73,7 +76,7 @@ function AddTask({
         />
         {errors.desc && <div className="error-message">{errors.desc}</div>}
 
-        <input
+        <Input
           type="date"
           name="date"
           value={currentTask.date}
@@ -84,17 +87,11 @@ function AddTask({
 
         {editingId !== null ? (
           <div className="formBtnGroup">
-            <button type="button" onClick={cancelEdit}>
-              Cancel
-            </button>
-            <button type="button" onClick={handleSubmit}>
-              Save
-            </button>
+            <FormButton type="button" onClick={cancelEdit} btnText="Cancel"/>
+            <FormButton type="button" onClick={handleSubmit} btnText="Save"/>
           </div>
         ) : (
-          <button type="button" onClick={handleSubmit}>
-            Add
-          </button>
+          <FormButton type="button" onClick={handleSubmit} btnText="Add"/>
         )}
       </div>
     </form>

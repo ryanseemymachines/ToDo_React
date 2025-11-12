@@ -1,0 +1,15 @@
+.form-button {
+  width:fit-content;
+  font-size: 1.5em;
+  padding: 12px 25px;
+  border-radius: 20px;
+  border: none;
+  background-color: rgb(174, 190, 233);
+  color: rgb(0, 0, 0);
+  transition: all 0.2s ease;
+}
+button:hover {
+  background-color: rgb(17, 39, 119);
+  color: white;
+  cursor: pointer;
+}

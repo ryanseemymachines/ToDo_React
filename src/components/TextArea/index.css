@@ -1,0 +1,12 @@
+textarea {
+  width: 80%;
+  padding: 12px;
+  font-size: 1.3em;
+  border: 2px solid rgb(201, 199, 199);
+  border-radius: 8px;
+  resize: vertical;
+}
+textarea:focus {
+  outline: none;
+  border: 2px solid rgb(95, 95, 95);
+}

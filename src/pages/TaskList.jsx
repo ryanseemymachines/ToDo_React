@@ -1,4 +1,6 @@
 import "./TaskList.scss";
+import Search from "../components/Search";
+import ListButtons from "../components/ListButtons";
 
 function TaskList({
   todoList,
@@ -11,25 +13,20 @@ function TaskList({
 }) {
   return (
     <section className="task-display">
-      <div className="search-bar">
-        <i className="fas fa-search search-icon"></i>
-        <input
+        <Search
           className="search-input"
-          type="text"
+          type="search"
           placeholder="Search tasks..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-      </div>
 
       {todoList.length === 0 ? (
-        <div>No tasks yet</div>
+        <div>No tasks</div>
       ) : (
         <>
           {todoList.some((task) => task.status === "pending") ? (
-            <button id="allCompleteBtn" type="button" onClick={markAllCompleted}>
-              Mark all as completed
-            </button>
+            <ListButtons id="allCompleteBtn" type="button" onClick={markAllCompleted} btnText="Mark all as completed" className="complete-btn"/>
           ) : (
             <p>All tasks completed</p>
           )}
@@ -63,36 +60,32 @@ function TaskList({
               <div className="btn-group">
                 {task.status === "pending" ? (
                   <>
-                    <button
-                      id="editBtn"
+                    <ListButtons
                       type="button"
                       onClick={() => startEdit(task)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      id="deleteBtn"
+                      btnText="Edit"
+                      className="edit-btn"
+                    />
+                    <ListButtons
                       type="button"
                       onClick={() => deleteTask(task.id)}
-                    >
-                      Delete
-                    </button>
-                    <button
-                      id="completeBtn"
+                      btnText="Delete"
+                      className="delete-btn"
+                    />
+                    <ListButtons
                       type="button"
                       onClick={() => markCompleted(task.id)}
-                    >
-                      Mark as completed
-                    </button>
+                      btnText="Mark as completed"
+                      className="complete-btn"
+                    />
                   </>
                 ) : (
-                  <button
-                    id="deleteBtn"
-                    type="button"
-                    onClick={() => deleteTask(task.id)}
-                  >
-                    Delete
-                  </button>
+                  <ListButtons
+                      type="button"
+                      onClick={() => deleteTask(task.id)}
+                      btnText="Delete"
+                      className="delete-btn"
+                    />
                 )}
               </div>
             </section>

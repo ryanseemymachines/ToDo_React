@@ -3,22 +3,6 @@
   flex-direction: column;
   gap: 20px;
   
-  input,textarea {
-    width: 80%;
-    padding: 12px;
-    font-size: 1.3em;
-    border: 2px solid rgb(201, 199, 199);
-    border-radius: 8px;
-    transition: all 0.2s ease;
-
-    &:focus {
-      outline: none;
-      border: 2px solid rgb(95, 95, 95);
-    }
-  }
-  textarea{
-      resize: vertical;
-    }
   .error-message {
     color: red;
     font-size: 1.1em;
@@ -26,22 +10,6 @@
 
   .formBtnGroup {
     display: flex;
-    gap: 5px;
-  }
-  button {
-    font-size: 1.5em;
-    padding: 10px;
-    width: 20%;
-    border-radius: 8px;
-    border: none;
-    background-color: rgb(174, 190, 233);
-    color: rgb(0, 0, 0);
-    transition: all 0.2s ease;
-
-    &:hover {
-      background-color: rgb(17, 39, 119);
-      color: white;
-      cursor: pointer;
-    }
+    gap: 10px;
   }
 }
