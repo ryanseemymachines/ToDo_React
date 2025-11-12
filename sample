@@ -1,0 +1,317 @@
+import React, { useState } from "react";
+import AddTask from "./AddTask";
+import TaskList from "./TaskList";
+
+function TaskManager() {
+  const [todoList, setTodoList] = useState([]);
+  const [currentTask, setCurrentTask] = useState({
+    id: "",
+    title: "",
+    desc: "",
+    date: "",
+    status: "pending",
+  });
+  const [editId, setEditId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const addTask = () => {
+    setTodoList((prev) => [
+      ...prev,
+      { ...currentTask, id: Date.now(), status: "pending" },
+    ]);
+    resetTask();
+  };
+
+  const updateTask = () => {
+    setTodoList((prev) =>
+      prev.map((task) =>
+        task.id === currentTask.id
+          ? { ...currentTask, status: "pending" }
+          : task
+      )
+    );
+    setEditId(null);
+    resetTask();
+  };
+
+  const deleteTask = (id) => {
+    setTodoList((prev) => prev.filter((task) => task.id !== id));
+  };
+
+  const startEdit = (task) => {
+    setEditId(task.id);
+    setCurrentTask(task);
+  };
+
+  const cancelEdit = () => {
+    setEditId(null);
+    resetTask();
+  };
+
+  const markCompleted = (id) => {
+    setTodoList((prev) => {
+      const completedTask = prev.find((task) => task.id === id);
+      if (!completedTask) return prev;
+      const updatedTask = { ...completedTask, status: "completed" };
+      const others = prev.filter((task) => task.id !== id);
+      return [...others, updatedTask]; // keep immutability
+    });
+  };
+
+  const markAllCompleted = () => {
+    setTodoList((prev) =>
+      prev.map((task) => ({ ...task, status: "completed" }))
+    );
+  };
+
+  const filteredTasks =
+    searchTerm.trim() === ""
+      ? todoList
+      : todoList.filter((task) => {
+          const term = searchTerm.toLowerCase();
+          return (
+            task.title.toLowerCase().includes(term) ||
+            task.desc.toLowerCase().includes(term)
+          );
+        });
+
+  const resetTask = () =>
+    setCurrentTask({ id: "", title: "", desc: "", date: "", status: "pending" });
+
+  return (
+    <div className="todo-content">
+      <AddTask
+        currentTask={currentTask}
+        setCurrentTask={setCurrentTask}
+        addTask={addTask}
+        updateTask={updateTask}
+        editingId={editId}
+        cancelEdit={cancelEdit}
+      />
+
+      <TaskList
+        todoList={filteredTasks}
+        deleteTask={deleteTask}
+        startEdit={startEdit}
+        markCompleted={markCompleted}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        markAllCompleted={markAllCompleted}
+      />
+    </div>
+  );
+}
+
+export default TaskManager;
+
+
+import React, { useState } from "react";
+import "./AddTask.scss";
+
+function AddTask({
+  currentTask,
+  setCurrentTask,
+  addTask,
+  updateTask,
+  editingId,
+  cancelEdit,
+}) {
+  const [errors, setErrors] = useState({});
+  const today = new Date().toISOString().split("T")[0];
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setCurrentTask((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const validate = () => {
+    const newErrors = {};
+    const nameRegex = /^[A-Za-z][A-Za-z0-9 _-]*[A-Za-z0-9]$/;
+    let valid = true;
+
+    if (!currentTask.title.trim()) {
+      newErrors.title = "Title is required";
+      valid = false;
+    } else if (!nameRegex.test(currentTask.title)) {
+      newErrors.title = "Title can only contain letters, numbers, spaces, _ or -";
+      valid = false;
+    }
+
+    if (currentTask.desc && !nameRegex.test(currentTask.desc)) {
+      newErrors.desc = "Description can only contain letters, numbers, spaces, _ or -";
+      valid = false;
+    }
+
+    if (!currentTask.date) {
+      newErrors.date = "Date is required";
+      valid = false;
+    } else if (currentTask.date < today) {
+      newErrors.date = "Date cannot be in the past";
+      valid = false;
+    }
+
+    setErrors(newErrors);
+    return valid;
+  };
+
+  const handleSubmit = () => {
+    if (!validate()) return;
+    editingId !== null ? updateTask() : addTask();
+    setErrors({});
+  };
+
+  return (
+    <form>
+      <div className="form-container">
+        <input
+          type="text"
+          name="title"
+          placeholder="Enter a task title"
+          value={currentTask.title}
+          onChange={handleChange}
+        />
+        {errors.title && <div className="error-message">{errors.title}</div>}
+
+        <input
+          type="text"
+          name="desc"
+          placeholder="Enter the description"
+          value={currentTask.desc}
+          onChange={handleChange}
+        />
+        {errors.desc && <div className="error-message">{errors.desc}</div>}
+
+        <input
+          type="date"
+          name="date"
+          value={currentTask.date}
+          min={today}
+          onChange={handleChange}
+        />
+        {errors.date && <div className="error-message">{errors.date}</div>}
+
+        {editingId !== null ? (
+          <div className="formBtnGroup">
+            <button type="button" onClick={cancelEdit}>
+              Cancel
+            </button>
+            <button type="button" onClick={handleSubmit}>
+              Save
+            </button>
+          </div>
+        ) : (
+          <button type="button" onClick={handleSubmit}>
+            Add
+          </button>
+        )}
+      </div>
+    </form>
+  );
+}
+
+export default AddTask;
+
+
+import React from "react";
+import "./TaskList.scss";
+
+function TaskList({
+  todoList,
+  deleteTask,
+  startEdit,
+  markCompleted,
+  searchTerm,
+  setSearchTerm,
+  markAllCompleted,
+}) {
+  return (
+    <section className="task-display">
+      <div className="search-bar">
+        <i className="fas fa-search search-icon"></i>
+        <input
+          className="search-input"
+          type="text"
+          placeholder="Search tasks..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
+      {todoList.length === 0 ? (
+        <div>No tasks yet</div>
+      ) : (
+        <>
+          {todoList.some((task) => task.status === "pending") ? (
+            <button id="allCompleteBtn" type="button" onClick={markAllCompleted}>
+              Mark all as completed
+            </button>
+          ) : (
+            <p>All tasks completed</p>
+          )}
+
+          {todoList.map((task) => (
+            <section className="task-group" key={task.id}>
+              <div className="detailDisplay">
+                <span>Title : </span>
+                {task.title}
+              </div>
+
+              <div className="detailDisplay">
+                <span>Description : </span>
+                {task.desc || "No description found"}
+              </div>
+
+              <div className="detailDisplay">
+                <span>Date : </span>
+                {new Date(task.date).toLocaleDateString("en-GB")}
+              </div>
+
+              <div className="detailDisplay">
+                <span>Status : </span>
+                {task.status}
+              </div>
+
+              <div className="btn-group">
+                {task.status === "pending" ? (
+                  <>
+                    <button
+                      id="editBtn"
+                      type="button"
+                      onClick={() => startEdit(task)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      id="deleteBtn"
+                      type="button"
+                      onClick={() => deleteTask(task.id)}
+                    >
+                      Delete
+                    </button>
+                    <button
+                      id="completeBtn"
+                      type="button"
+                      onClick={() => markCompleted(task.id)}
+                    >
+                      Mark as completed
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    id="deleteBtn"
+                    type="button"
+                    onClick={() => deleteTask(task.id)}
+                  >
+                    Delete
+                  </button>
+                )}
+              </div>
+            </section>
+          ))}
+        </>
+      )}
+    </section>
+  );
+}
+
+export default TaskList;
