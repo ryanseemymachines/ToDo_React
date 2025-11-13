@@ -1,12 +1,11 @@
 import React from "react";
-import './index.css';
+import styles from './index.module.css';
 
-function Input(props) {
+function TextInput(props) {
   const {type,name,placeholder,value,min,onChange}=props
   return (
     <div>
-      
-      <input
+      <input className={styles.textInput}
         type={type}
         name={name}
         placeholder={placeholder}
@@ -18,4 +17,4 @@ function Input(props) {
   );
 }
 
-export default Input;
+export default TextInput;

@@ -1,11 +1,11 @@
 import React from "react";
-import './index.css';
+import styles from './index.module.css';
 
-function ListButtons(props) {
+function ListButtons({type,onClick,btnText,additionalClass}) {
   return (
     <div>
-      <button type={props.type} onClick={props.onClick} className={props.className}>
-        {props.btnText}
+      <button type={type} onClick={onClick} className={`${styles.btn} ${styles[additionalClass]}`}>
+        {btnText}
       </button>
     </div>
   );

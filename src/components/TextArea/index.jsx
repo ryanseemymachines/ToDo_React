@@ -1,10 +1,10 @@
 import React from "react";
-import './index.css';
+import styles from './index.module.css';
 
 function TextArea(props) {
   return (
     <div>
-      <textarea
+      <textarea className={styles.textAreaInput}
         type={props.type}
         name={props.name}
         placeholder={props.placeholder}

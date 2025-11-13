@@ -1,4 +1,4 @@
-button {
+.btn {
   font-size: 1.05em;
   padding: 10px 15px;
   width: 100%;
@@ -7,31 +7,31 @@ button {
   color: rgb(0, 0, 0);
   transition: all 0.2s ease;
 }
-button:hover {
+.btn:hover {
   color: white;
   cursor: pointer;
 }
 
-.edit-btn {
+.editBtn {
   background-color: rgb(144, 162, 210);
 }
 
-.edit-btn:hover {
+.editBtn:hover {
   background-color: rgb(17, 39, 119);
 }
 
-.delete-btn {
+.deleteBtn {
   background-color: rgb(139, 155, 175);
 }
 
-.delete-btn:hover {
+.deleteBtn:hover {
   background-color: rgb(72, 78, 96);
 }
 
-.complete-btn {
+.completeBtn {
   background-color: rgba(80, 204, 80, 0.736);
 }
 
-.complete-btn:hover {
+.completeBtn:hover {
   background-color: rgb(1, 178, 7);
 }

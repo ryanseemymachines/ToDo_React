@@ -1,4 +1,4 @@
-textarea {
+.textAreaInput {
   width: 80%;
   padding: 12px;
   font-size: 1.3em;
@@ -6,7 +6,7 @@ textarea {
   border-radius: 8px;
   resize: vertical;
 }
-textarea:focus {
+.textAreaInput:focus {
   outline: none;
   border: 2px solid rgb(95, 95, 95);
 }

@@ -13,20 +13,25 @@ function TaskList({
 }) {
   return (
     <section className="task-display">
-        <Search
-          className="search-input"
-          type="search"
-          placeholder="Search tasks..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+      <Search
+        className="search-input"
+        type="search"
+        placeholder="Search tasks..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
 
       {todoList.length === 0 ? (
         <div>No tasks</div>
       ) : (
         <>
           {todoList.some((task) => task.status === "pending") ? (
-            <ListButtons id="allCompleteBtn" type="button" onClick={markAllCompleted} btnText="Mark all as completed" className="complete-btn"/>
+            <ListButtons
+              type="button"
+              onClick={markAllCompleted}
+              btnText="Mark all as completed"
+              additionalClass="completeBtn"
+            />
           ) : (
             <p>All tasks completed</p>
           )}
@@ -64,28 +69,28 @@ function TaskList({
                       type="button"
                       onClick={() => startEdit(task)}
                       btnText="Edit"
-                      className="edit-btn"
+                      additionalClass="editBtn"
                     />
                     <ListButtons
                       type="button"
                       onClick={() => deleteTask(task.id)}
                       btnText="Delete"
-                      className="delete-btn"
+                      additionalClass="deleteBtn"
                     />
                     <ListButtons
                       type="button"
                       onClick={() => markCompleted(task.id)}
                       btnText="Mark as completed"
-                      className="complete-btn"
+                      additionalClass="completeBtn"
                     />
                   </>
                 ) : (
                   <ListButtons
-                      type="button"
-                      onClick={() => deleteTask(task.id)}
-                      btnText="Delete"
-                      className="delete-btn"
-                    />
+                    type="button"
+                    onClick={() => deleteTask(task.id)}
+                    btnText="Delete"
+                    additionalClass="deleteBtn"
+                  />
                 )}
               </div>
             </section>

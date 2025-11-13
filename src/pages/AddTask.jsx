@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "./AddTask.scss";
 import FormButton from "../components/FormButtons";
-import Input from "../components/Input";
+import TextInput from "../components/TextInput";
 import TextArea from "../components/TextArea";
+import DateInput from "../components/DateInput";
 
 function AddTask({
   currentTask,
@@ -59,7 +60,7 @@ function AddTask({
   return (
     <form>
       <div className="form-container">
-        <Input
+        <TextInput
           type="text"
           name="title"
           placeholder="Enter a task title"
@@ -76,7 +77,7 @@ function AddTask({
         />
         {errors.desc && <div className="error-message">{errors.desc}</div>}
 
-        <Input
+        <DateInput
           type="date"
           name="date"
           value={currentTask.date}
