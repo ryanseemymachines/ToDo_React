@@ -1,7 +1,7 @@
 import styles from './index.module.css';
 
 function TextInput(props) {
-  const {type,name,placeholder,value,min,onChange}=props
+  const {type,name,placeholder,value,onChange}=props
   return (
     <div>
       <input className={styles.textInput}
@@ -9,7 +9,6 @@ function TextInput(props) {
         name={name}
         placeholder={placeholder}
         value={value}
-        min={min}
         onChange={onChange}
       />
     </div>
