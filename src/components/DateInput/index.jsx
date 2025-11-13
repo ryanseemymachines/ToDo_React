@@ -1,4 +1,3 @@
-import React from "react";
 import styles from './index.module.css';
 
 function DateInput({ type, name, value, min, onChange }) {

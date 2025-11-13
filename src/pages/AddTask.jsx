@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./AddTask.scss";
 import FormButton from "../components/FormButtons";
 import TextInput from "../components/TextInput";
